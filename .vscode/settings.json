@@ -1,0 +1,15 @@
+{
+  // 让 VSCode 知道 Odoo 源码路径
+  "python.analysis.extraPaths": [
+    "../odoo"
+  ],
+
+  // 指定使用项目自带的虚拟环境解释器
+  "python.defaultInterpreterPath": "venv/Scripts/python.exe",
+
+  // 分析模式只针对当前工作区
+  "python.analysis.diagnosticMode": "workspace",
+
+  // 拼写检查：忽略 Odoo 相关术语
+  "cSpell.words": ["odoo", "addons", "manifest", "odoo-bin"]
+}
