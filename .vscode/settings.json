@@ -5,7 +5,7 @@
   ],
 
   // 指定使用项目自带的虚拟环境解释器
-  "python.defaultInterpreterPath": "venv/Scripts/python.exe",
+  "python.defaultInterpreterPath": "../venv/Scripts/python.exe",
 
   // 分析模式只针对当前工作区
   "python.analysis.diagnosticMode": "workspace",
