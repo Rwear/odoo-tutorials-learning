@@ -2,31 +2,35 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Odoo: Start (dev, venv, autoreload)",        // 日常只跑这个
+      "label": "Odoo: Start (dev, venv, autoreload)",
       "type": "shell",
       "command": "powershell",
       "args": [
-        "-NoProfile","-ExecutionPolicy","Bypass","-Command",
+        "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command",
         "& { . .\\.venv\\Scripts\\activate; python ..\\odoo\\odoo-bin -c ..\\odoo.conf --dev=reload }"
       ],
       "options": { "cwd": "${workspaceFolder}" },
-      "presentation": { "reveal": "always", "panel": "dedicated", "focus": true },
-      "group": { "kind": "build", "isDefault": true }         // 让 Ctrl+Shift+B 直接启动
+      "presentation": { "reveal": "always", "panel": "dedicated", "focus": true }
+      // 注意：这里不再设成默认 build 任务
     },
     {
-      "label": "Odoo: Upgrade estate (-u) once",               // 仅当改了字段/视图/权限等
+      "label": "Odoo: Upgrade estate (-u) once",
       "type": "shell",
       "command": "powershell",
       "args": [
-        "-NoProfile","-ExecutionPolicy","Bypass","-Command",
-        "& { . .\\.venv\\Scripts\\activate; python ..\\odoo\\odoo-bin -c ..\\odoo.conf -u estate --stop-after-init --log-level=debug }"
+        "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command",
+        "& { . .\\.venv\\Scripts\\activate; python ..\\odoo\\odoo-bin -c ..\\odoo.conf -d odoo -u estate --stop-after-init --log-level=debug }"
       ],
       "options": { "cwd": "${workspaceFolder}" },
       "presentation": { "reveal": "always", "panel": "dedicated", "focus": true }
     },
     {
-      "label": "Odoo: Upgrade then Start",                     // 一键：先升级再启动
-      "dependsOn": [ "Odoo: Upgrade estate (-u) once", "Odoo: Start (dev, venv, autoreload)" ]
+      "label": "Odoo: Upgrade then Start",
+      "dependsOn": [
+        "Odoo: Upgrade estate (-u) once",
+        "Odoo: Start (dev, venv, autoreload)"
+      ],
+      "group": { "kind": "build", "isDefault": true }  // 现在这个才是 Ctrl+Shift+B
     }
   ]
 }
