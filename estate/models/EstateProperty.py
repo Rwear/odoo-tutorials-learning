@@ -5,14 +5,25 @@ class EstateProperty(models.Model):
     _name = "estate.property"
     _description = "Estate Property"
 
-    name = fields.Char(required = True)
+    title = fields.Char(required = True)
     description = fields.Text()
     postcode = fields.Char()
-    date_availability = fields.Date()
+    date_availability = fields.Date(
+        string="Available Date",
+        copy=False,
+        default= lambda self: fields.Date.add(fields.Date.today(), months=3)
+    )
     expected_price = fields.Float(required=True)
-    selling_price = fields.Float()
-    bedrooms = fields.Integer()
-    living_area = fields.Integer()
+    selling_price = fields.Float(
+        string="Selling Price",
+        readonly=True,
+        copy=False
+    )
+    bedrooms = fields.Integer(
+        string="Bedrooms",
+        default=2
+    )
+    living_area = fields.Integer("Living Area (sqm)")
     facades = fields.Integer()
     garage = fields.Boolean()
     garden = fields.Boolean()
@@ -27,5 +38,21 @@ class EstateProperty(models.Model):
         ],
         string="Garden Orientation"
     )
+
+    status = fields.Selection([
+        ("new", "New"),
+        ("offer_received", "Offer Received"),
+        ("offer_accepted", "Offer Accepted"),
+        ("sold", "Sold"),
+        ("canceled", "Canceled")
+    ])
+
+    active = fields.Boolean(default=True)
+
+    _expected_price_check = models.Constraint(
+        "CHECK (expected_price > 0)",
+        "Expected price must be positive"
+    )
+
    
     
