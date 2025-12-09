@@ -14,6 +14,6 @@
     <menuitem
         id="estate_menu_property_action"
         parent="estate_menu_properties"
-        action="test_model_action"
+        action="estate_property_action"
     />
 </odoo>

@@ -39,20 +39,25 @@ class EstateProperty(models.Model):
         string="Garden Orientation"
     )
 
-    status = fields.Selection([
-        ("new", "New"),
-        ("offer_received", "Offer Received"),
-        ("offer_accepted", "Offer Accepted"),
-        ("sold", "Sold"),
-        ("canceled", "Canceled")
-    ])
+    state = fields.Selection(
+        [
+            ("new", "New"),
+            ("offer_received", "Offer Received"),
+            ("offer_accepted", "Offer Accepted"),
+            ("sold", "Sold"),
+            ("cancelled", "Cancelled"),
+        ],
+        string="State",
+        required=True,
+        copy=False,
+        default="new"
+        
+    )
 
     active = fields.Boolean(default=True)
 
     _expected_price_check = models.Constraint(
-        "CHECK (expected_price > 0)",
+        "CHECK (expected_price >= 0)",
         "Expected price must be positive"
     )
 
-   
-    
