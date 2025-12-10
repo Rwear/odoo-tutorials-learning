@@ -58,6 +58,40 @@
     </field>
 
 </record>
+
+<record id="estate_property_view_search" model="ir.ui.view">
+    <field name="name">estate.property.search</field>
+    <field name="model">estate.property</field>
+    <field name="arch" type="xml">
+        <search string="Search Properties">
+            <field name="title"></field>
+            <field name="postcode"></field>
+            <field name="expected_price"></field>
+            <field name="bedrooms"></field>
+            <field name="living_area"></field>
+            <field name="facades"></field>
+
+            <filter 
+                name="available"
+                string="Available"
+                domain="['|', ('state', '=', 'new'), ('state', '=', 'offer_received')]"
+                >
+            </filter>
+            
+            <group expand="0" string="Group By">
+                <filter
+                    name="group_by_postcode"
+                    string="Postcode"
+                    context="{'group_by': 'postcode'}"
+                />
+            </group>
+
+        </search>
+    </field>
+
+    
+
+</record>
     
 
 </odoo>
