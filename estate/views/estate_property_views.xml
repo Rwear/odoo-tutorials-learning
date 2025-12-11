@@ -64,21 +64,23 @@
     <field name="model">estate.property</field>
     <field name="arch" type="xml">
         <search string="Search Properties">
-            <field name="title"></field>
-            <field name="postcode"></field>
-            <field name="expected_price"></field>
-            <field name="bedrooms"></field>
-            <field name="living_area"></field>
-            <field name="facades"></field>
+            <field name="title"/>
+            <field name="postcode"/>
+            <field name="expected_price"/>
+            <field name="bedrooms"/>
+            <field name="living_area"/>
+            <field name="facades"/>
+
+            <separator/>
 
             <filter 
                 name="available"
                 string="Available"
                 domain="['|', ('state', '=', 'new'), ('state', '=', 'offer_received')]"
-                >
-            </filter>
+            />
+
             
-            <group expand="0" string="Group By">
+            <group>
                 <filter
                     name="group_by_postcode"
                     string="Postcode"
