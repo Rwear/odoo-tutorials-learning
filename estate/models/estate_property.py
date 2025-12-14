@@ -56,8 +56,10 @@ class EstateProperty(models.Model):
 
     active = fields.Boolean(default=True)
 
-    _expected_price_check = models.Constraint(
-        "CHECK (expected_price >= 0)",
-        "Expected price must be positive"
+    _check_expected_price = models.Constraint(
+        "CHECK(expected_price > 0)",
+        "Expected price must be strictly positive.",
     )
+
+    property_type_id = fields.Many2one("estate.property.type", string="Property Type")
 

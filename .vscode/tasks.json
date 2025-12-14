@@ -2,35 +2,53 @@
   "version": "2.0.0",
   "tasks": [
     {
+      // ① 启动 Odoo（开发模式，自动重载），用新数据库 odoo_clean
       "label": "Odoo: Start (dev, venv, autoreload)",
       "type": "shell",
       "command": "powershell",
       "args": [
         "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command",
-        "& { . .\\.venv\\Scripts\\activate; python ..\\odoo\\odoo-bin -c ..\\odoo.conf --dev=reload }"
+        "& { . .\\.venv\\Scripts\\activate; python ..\\odoo\\odoo-bin -c ..\\odoo.conf -d odoo_clean --dev=reload }"
       ],
       "options": { "cwd": "${workspaceFolder}" },
       "presentation": { "reveal": "always", "panel": "dedicated", "focus": true }
       // 注意：这里不再设成默认 build 任务
     },
+
     {
+      // ② 只在第一次用新数据库时跑一次：创建库并安装 estate 模块
+      "label": "Odoo: Init estate on new DB (install, run once)",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command",
+        "& { . .\\.venv\\Scripts\\activate; python ..\\odoo\\odoo-bin -c ..\\odoo.conf -d odoo_clean -i estate --stop-after-init --log-level=debug }"
+      ],
+      "options": { "cwd": "${workspaceFolder}" },
+      "presentation": { "reveal": "always", "panel": "dedicated", "focus": true }
+    },
+
+    {
+      // ③ 之后开发时用这个：升级 estate 模块（-u）
       "label": "Odoo: Upgrade estate (-u) once",
       "type": "shell",
       "command": "powershell",
       "args": [
         "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command",
-        "& { . .\\.venv\\Scripts\\activate; python ..\\odoo\\odoo-bin -c ..\\odoo.conf -d odoo -u estate --stop-after-init --log-level=debug }"
+        "& { . .\\.venv\\Scripts\\activate; python ..\\odoo\\odoo-bin -c ..\\odoo.conf -d odoo_clean -u estate --stop-after-init --log-level=debug }"
       ],
       "options": { "cwd": "${workspaceFolder}" },
       "presentation": { "reveal": "always", "panel": "dedicated", "focus": true }
     },
+
     {
+      // ④ 先升级，再启动（Ctrl+Shift+B 会跑这个）
       "label": "Odoo: Upgrade then Start",
       "dependsOn": [
         "Odoo: Upgrade estate (-u) once",
         "Odoo: Start (dev, venv, autoreload)"
       ],
-      "group": { "kind": "build", "isDefault": true }  // 现在这个才是 Ctrl+Shift+B
+      "group": { "kind": "build", "isDefault": true }
     }
   ]
 }
