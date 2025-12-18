@@ -21,6 +21,7 @@
                     <field name="date_availability"/>
                     <field name="state"/>
                     <field name="property_type_id"/>
+                    <field name="tag_ids" widget="many2many_tags"/>
                 </list>
             </field>
         </record>
@@ -50,8 +51,22 @@
                         </group>
 
                         <notebook>
+
                             <page string="description">
-                                <field name="description"/>
+                                <group>
+                                    <field name="description"/>
+                                    <field name="tag_ids" widget="many2many_tags"/>
+                                </group>
+                            </page>
+
+                            <page string="Offers">
+                                <field name="offer_ids">
+                                    <list editable="bottom">
+                                        <field name="price"/>
+                                        <field name="status"/>
+                                        <field name="partner_id"/>
+                                    </list>
+                                </field>
                             </page>
 
                             <page string="Other Info">
@@ -63,8 +78,6 @@
                                 </group>
                             </page>
                         </notebook>
-
-
                     </sheet>
                 </form>
                 
@@ -84,6 +97,7 @@
                     <field name="living_area"/>
                     <field name="facades"/>
                     <field name="property_type_id"/>
+                    
                     <separator/>
 
                     <filter 

@@ -21,7 +21,7 @@
             <field name="name">estate.property.type.form</field>
             <field name="model">estate.property.type</field>
             <field name="arch" type="xml">
-                <form>
+                <form>                                
                     <sheet>
                         <h1>
                             <field name="name"></field>
