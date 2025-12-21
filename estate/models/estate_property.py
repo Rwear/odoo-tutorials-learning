@@ -1,4 +1,4 @@
-from odoo import fields, models
+from odoo import api,fields, models
 
 class EstateProperty(models.Model):
     """Real Estate Property (tutorial exercise)."""
@@ -87,3 +87,40 @@ class EstateProperty(models.Model):
         string="Offers"
     )
     
+    total_area = fields.Float(required=False, compute="_compute_total_area")
+
+    
+    @api.depends("living_area", "garden_area")
+    def _compute_total_area(self):
+        for record in self:
+            record.total_area = (record.living_area or 0) + (record.garden_area or 0)
+
+
+    best_price = fields.Float(compute="_compute_best_price")
+
+    @api.depends("offer_ids.price")
+    def _compute_best_price(self):
+        for record in self:
+            prices = record.offer_ids.mapped("price")
+            record.best_price = max(prices) if prices else 0
+    
+    validity = fields.Integer(default=7)
+    date_deadline = fields.Date(
+        compute="_compute_date_deadline",
+        inverse="_inverse_date_deadline"
+    )
+
+    @api.depends("date_availability", "validity")
+    def _compute_date_deadline(self):
+        for record in self:
+            create_dt = record.create_date or fields. Datetime.now()
+            create_d = fields.Date.to_date(create_dt)
+            record.date_deadline = fields.Date.add(create_d, days=record.validity or 0)
+    
+    def _inverse_date_deadline(self):
+        for record in self:
+            if not record.date_deadline:
+                continue
+            create_dt = record.create_date or fields.Datetime.now()
+            create_d = fields.Date.to_date(create_dt)
+            record.validity = (record.date_deadline - create_d).days
