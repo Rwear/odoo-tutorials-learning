@@ -124,3 +124,12 @@ class EstateProperty(models.Model):
             create_dt = record.create_date or fields.Datetime.now()
             create_d = fields.Date.to_date(create_dt)
             record.validity = (record.date_deadline - create_d).days
+
+    @api.onchange("garden")
+    def _onchange_garden(self):
+        if self.garden:
+            self.garden_area = 10
+            self.garden_orientation = "north"
+        else:
+            self.garden_area = 0
+            self.garden_orientation = False
