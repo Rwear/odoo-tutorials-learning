@@ -1,5 +1,6 @@
-from odoo import api,fields, models
-from odoo.exceptions import UserError
+from odoo import api, fields, models
+from odoo.exceptions import UserError, ValidationError
+from odoo.tools.float_utils import float_compare, float_is_zero
 
 class EstateProperty(models.Model):
     """Real Estate Property (tutorial exercise)."""
@@ -154,3 +155,16 @@ class EstateProperty(models.Model):
                 raise UserError("Cancelled properties cannot be sold.")
             record.state = "sold"
         return True
+    
+    @api.constrains("expected_price", "selling_price")
+    def _check_selling_price_minimum(self):
+        rounding = self.env.companies.currency_id.rounding
+        for record in self:
+            if float_is_zero(record.selling_price, precision_rounding=rounding):
+                continue
+
+            min_price = record.expected_price * 0.9
+            if float_compare(record.selling_price, min_price, precision_rounding=rounding) < 0:
+                raise ValidationError(
+                    "Selling price cannot lower than 90% of the expected price."
+                )
