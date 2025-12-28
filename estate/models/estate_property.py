@@ -62,6 +62,11 @@ class EstateProperty(models.Model):
         "Expected price must be strictly positive.",
     )
 
+    _check_selling_price = models.Constraint(
+        "CHECK(selling_price >= 0)",
+        "Selling price must be non-negative.",
+    )
+
     property_type_id = fields.Many2one("estate.property.type", string="Property Type")
 
     # Buyer(partner) and Salesperson(user)
